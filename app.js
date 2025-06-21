@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-const Campground = require('./models/campgrounds')
+const methodOverride = require('method-override');
+const Campground = require('./models/campgrounds');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp')
 
@@ -18,9 +19,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 app.get("/", (req, res) => {
-    res.send("Hey There!");
+    res.render("index");
 })
 
 app.get("/campgrounds", async (req, res) => {
@@ -42,6 +44,24 @@ app.get("/campgrounds/:id", async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     res.render("campgrounds/show", { campground });
 })
+
+app.delete("/campgrounds/:id", async (req, res) => {
+    await Campground.findByIdAndDelete(req.params.id);
+    const campgrounds = Campground.find({});
+    res.redirect("/campgrounds")
+})
+
+app.get("/campgrounds/:id/edit", async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    res.render("campgrounds/edit", { campground })
+})
+
+app.put("/campgrounds/:id", async (req, res) => {
+    const { id } = req.params;
+    await Campground.findByIdAndUpdate(id, req.body, { runValidators: true });
+    res.redirect(`/campgrounds/${id}`);
+})
+
 app.listen(3000, () => {
     console.log("Listening on port 3000...")
 })

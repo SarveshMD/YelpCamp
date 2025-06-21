@@ -15,8 +15,11 @@
     <h2>
         <%= campground.location %>
     </h2>
-    <p><a href="/campgrounds/new">New Campground</a></p>
-    <p><a href="/campgrounds">Back</a></p>
+    <a href="/campgrounds/<%= campground._id %>/edit">EDIT</a><br><br>
+    <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST"><button type="submit">DELETE</button>
+    </form>
+    <p><a href="/campgrounds/new">NEW CAMPGROUND</a></p>
+    <p><a href="/campgrounds">BACK</a></p>
 </body>
 
 </html>
