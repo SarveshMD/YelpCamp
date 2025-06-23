@@ -35,7 +35,7 @@ app.get("/campgrounds/new", (req, res) => {
 })
 
 app.post("/campgrounds/new", async (req, res) => {
-    const newCampground = new Campground(req.body);
+    const newCampground = new Campground({ ...req.body.campground });
     await newCampground.save();
     res.redirect(`/campgrounds/${newCampground._id}`);
 })
@@ -58,7 +58,7 @@ app.get("/campgrounds/:id/edit", async (req, res) => {
 
 app.put("/campgrounds/:id", async (req, res) => {
     const { id } = req.params;
-    await Campground.findByIdAndUpdate(id, req.body, { runValidators: true });
+    await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true });
     res.redirect(`/campgrounds/${id}`);
 })
 
