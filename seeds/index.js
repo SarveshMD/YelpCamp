@@ -23,10 +23,13 @@ const seedDB = async () => {
     const images = await getImages('Nature camping sites', process.env.PEXELS_API);
     for (let i = 0; i < 50; i++) {
         const randLocation = getRandomElement(locations);
+        const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campground({
             title: `${getRandomElement(descriptors)} ${getRandomElement(places)}`,
             image: images[i].src.medium,
-            location: `${randLocation.city}, ${randLocation.state}`
+            location: `${randLocation.city}, ${randLocation.state}`,
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio, alias? Excepturi eos commodi ullam quod tempora, doloremque saepe aliquam velit error cum pariatur earum, fugit non, aliquid neque animi. Consequuntur.",
+            price
         })
         await camp.save();
     }
