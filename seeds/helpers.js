@@ -16,7 +16,10 @@ module.exports.descriptors = [
     'Sea',
     'Sky',
     'Dusty',
-    'Diamond'
+    'Diamond',
+    'Hogsmeade',
+    "Godric's",
+    "Merlin's"
 ]
 
 module.exports.places = [
@@ -29,6 +32,7 @@ module.exports.places = [
     'Ghost Town',
     'Camp',
     'Dispersed Camp',
+    'Broomsticks',
     'Backcountry',
     'River',
     'Creek',

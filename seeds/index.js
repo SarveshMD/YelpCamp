@@ -20,12 +20,12 @@ const getRandomElement = (arr) => {
 
 const seedDB = async () => {
     await Campground.deleteMany({});
-    const images = await getImages('Camping Sites', process.env.PEXELS_API);
+    const images = await getImages('Nature camping sites', process.env.PEXELS_API);
     for (let i = 0; i < 50; i++) {
         const randLocation = getRandomElement(locations);
         const camp = new Campground({
             title: `${getRandomElement(descriptors)} ${getRandomElement(places)}`,
-            image: images[i].src.original,
+            image: images[i].src.medium,
             location: `${randLocation.city}, ${randLocation.state}`
         })
         await camp.save();
@@ -45,7 +45,6 @@ const getImages = async (q, API_KEY) => {
             }
         });
         const res = await req.json()
-        console.log(res, res.photos);
         return res.photos;
     }
     catch (err) {
