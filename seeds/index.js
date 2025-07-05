@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { descriptors, places } = require('./helpers.js')
 const locations = require('./locations.js')
 const Campground = require('../models/campgrounds')
+require('dotenv').config();
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp')
 
@@ -19,10 +20,12 @@ const getRandomElement = (arr) => {
 
 const seedDB = async () => {
     await Campground.deleteMany({});
+    const images = await getImages('Camping Sites', process.env.PEXELS_API);
     for (let i = 0; i < 50; i++) {
         const randLocation = getRandomElement(locations);
         const camp = new Campground({
             title: `${getRandomElement(descriptors)} ${getRandomElement(places)}`,
+            image: images[i].src.original,
             location: `${randLocation.city}, ${randLocation.state}`
         })
         await camp.save();
@@ -32,3 +35,20 @@ const seedDB = async () => {
 seedDB().then(() => {
     mongoose.connection.close();
 });
+
+const getImages = async (q, API_KEY) => {
+    try {
+
+        const req = await fetch(`https://api.pexels.com/v1/search?query=${q}&per_page=50&orientation=landscape`, {
+            headers: {
+                Authorization: API_KEY
+            }
+        });
+        const res = await req.json()
+        console.log(res, res.photos);
+        return res.photos;
+    }
+    catch (err) {
+        console.log("error:", err);
+    }
+};
